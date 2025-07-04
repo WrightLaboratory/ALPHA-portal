@@ -1,0 +1,109 @@
+# yamllint disable rule:comments-indentation
+---
+###############################################################################
+#                           Authelia Configuration                            #
+###############################################################################
+
+theme: dark
+default_2fa_method: totp
+
+server:
+  host: 0.0.0.0
+  port: 9091
+  path: ""
+  read_buffer_size: 4096
+  write_buffer_size: 4096
+  enable_pprof: false
+  enable_expvars: false
+  disable_healthcheck: false
+  tls:
+    key: ""
+    certificate: ""
+    client_certificates: []
+  headers:
+    csp_template: ""
+  endpoints:
+    authz:
+      auth-request:
+        implementation: 'AuthRequest'
+
+log:
+  level: debug
+
+totp:
+  disable: false
+  issuer: authelia.com
+  algorithm: sha1
+  digits: 6
+  period: 30
+  skew: 1
+  secret_size: 32
+
+webauthn:
+  disable: false
+  timeout: 60s
+  display_name: Authelia
+  attestation_conveyance_preference: indirect
+  user_verification: preferred
+
+authentication_backend:
+  password_reset:
+    disable: false
+  refresh_interval: 5m
+
+  ldap:
+    address: 'ldap://lldap:3890'
+    implementation: 'lldap'
+    timeout: '5s'
+    start_tls: false
+    base_dn: 'dc=example,DC=ru'
+    additional_users_dn: 'OU=people'
+    users_filter: '(&({username_attribute}={input})(objectClass=person))'
+    additional_groups_dn: 'OU=groups'
+    groups_filter: '(member={dn})'
+    user: 'UID=admin,OU=people,DC=example,DC=ru'
+    password: 'password'
+    attributes:
+      distinguished_name: 'distinguishedName'
+      username: 'uid'
+      mail: 'mail'
+      member_of: 'memberOf'
+      group_name: 'cn'
+
+access_control:
+  rules:
+    - domain: '*.example.ru'
+      subject: 
+        - ['group:lldap_admin']
+        - ['group:abc']
+      policy: two_factor
+
+session:
+  name: authelia_session
+  same_site: lax
+  expiration: 1h
+  inactivity: 5m
+  remember_me_duration: 1M
+  cookies:
+    - domain: 'example.ru'
+      authelia_url: 'https://auth.example.ru'
+      default_redirection_url: 'https://example.ru'
+      
+regulation:
+  max_retries: 3
+  find_time: 2m
+  ban_time: 5m
+
+storage:
+  encryption_key: 'dee329bf-63a1-49a6-8278-c088e2de681e'
+  postgres:
+    address: 'tcp://db:5432'
+    database: 'general'
+    schema: 'authelia'
+    username: 'authelia_user'
+    password: 'authelia_password'
+    timeout: '5s'
+
+notifier:
+  filesystem:
+    filename: /config/notification.txt

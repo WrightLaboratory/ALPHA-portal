@@ -1,0 +1,63 @@
+version: '3.3'
+
+services:
+
+  authelia-server:
+    image: authelia/authelia
+    container_name: authelia-server
+    restart: unless-stopped
+    volumes:
+      - ./authelia/config:/config
+      - ./authelia/secrets:/secrets
+    environment:
+    - AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET_FILE=/secrets/JWT_SECRET
+    - AUTHELIA_SESSION_SECRET_FILE=/secrets/SESSION_SECRET
+
+  gateway:
+    image: nginx:latest
+    restart: unless-stopped
+    volumes:
+      - ./nginx:/etc/nginx
+      - ./certs:/etc/letsencrypt/archive/certs
+    ports:
+      - 443:443
+      - 80:80
+
+  whoami:
+    container_name: whoami
+    image: docker.io/traefik/whoami
+    restart: unless-stopped
+
+  lldap:
+    container_name: lldap
+    hostname: lldap
+    image: lldap/lldap:stable
+    restart: unless-stopped
+    volumes:
+      - ./lldap/secrets:/secrets
+    environment:
+      - UID=0                                              
+      - GID=0                                              
+      - LLDAP_LDAP_BASE_DN=dc=example,dc=ru
+      - LLDAP_JWT_SECRET_FILE=/secrets/JWT_SECRET
+      - LLDAP_KEY_SEED=qg3gAOcxCqPlMpk8zCP0LDXxZEiikJ7E84FBbwxPEge6eYuRtpg7VH3bLa6FonBz
+      - LLDAP_DATABASE_URL=postgresql://lldap_user:lldap_password@db/general
+    ports:
+      - 17170:17170
+
+  db:
+    image: postgres:14
+    restart: unless-stopped
+    volumes:
+      - ./db/entrypoint-scripts:/docker-entrypoint-initdb.d
+      - ./db/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=general
+      - LANG=C.UTF-8
+    ports:
+      - 5432:5432
+    logging:
+      options:
+        max-file: "7"
+        max-size: "5m"      
