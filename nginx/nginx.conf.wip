@@ -26,8 +26,40 @@ http {
     ssl_certificate /etc/letsencrypt/archive/certs/cert.pem;
     ssl_certificate_key /etc/letsencrypt/archive/certs/key.pem;
 
+    #location / {
+    #  return 200 "hello world!";
+    #}
+
+    #include /etc/nginx/authelia-location.conf;
+
+    
+
     location / {
-      return 200 "hello world!";
+      include /etc/nginx/proxy.conf;
+      include /etc/nginx/authelia-authrequest.conf;
+      include /etc/nginx/authelia-location.conf;
+      set $upstream http://homer:8080;
+      proxy_pass $upstream;
+    }
+
+    set $upstream http://authelia-server:9091/authelia/;
+    
+    #location = /authelia/api/verify {
+    #  proxy_pass $upstream;
+    #}
+
+    #location /authelia/api/authz/ {
+    #  proxy_pass $upstream;
+    #}
+    
+    location /authelia/ {
+      include /etc/nginx/proxy.conf;
+      proxy_pass $upstream;
+      rewrite ^/authelia(/.*)$ $1 break;
+    }
+    
+    location /authelia/static/ {
+      proxy_pass http://authelia-server:9091/authelia/static/;
     }
   }
 

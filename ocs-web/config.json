@@ -1,0 +1,7 @@
+{"crossbars": [
+    {"name": "ocs-8001",
+     "url": "ws://localhost:8001/ws",
+     "realm": "test_realm",
+     "addr_root": "observatory"}
+    ]
+}

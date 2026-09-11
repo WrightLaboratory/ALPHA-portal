@@ -1,0 +1,63 @@
+volumes:
+  grafana-storage:
+  influxdb-storage-2:
+
+networks:
+  ocs-net:
+
+services:
+   # --------------------------------------------------------------------------
+  # Grafana for the live monitor.
+  # --------------------------------------------------------------------------
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "127.0.0.1:3001:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
+  # InfluxDB Backend for Grafana
+  influxdb:
+    image: influxdb:1.7
+    container_name: "influxdb-2"
+    restart: always
+    ports:
+      - "8087:8086"
+    environment:
+      - INFLUXDB_HTTP_LOG_ENABLED=false
+    volumes:
+      - influxdb-storage-2:/var/lib/influxdb
+
+  # --------------------------------------------------------------------------
+  # Crossbar Server
+  # --------------------------------------------------------------------------
+  crossbar:
+    image: simonsobs/ocs-crossbar:latest
+    ports:
+      - "127.0.0.1:8002:8001" # expose for OCS
+      - "127.0.0.1:8003:8000" # expose for OCS
+      - "127.0.0.1:8004:8080" # expose for OCS
+    environment:
+         - PYTHONUNBUFFERED=1
+
+  # --------------------------------------------------------------------------
+  # OCS Components
+  # --------------------------------------------------------------------------
+  # Fake Data Agent for example housekeeping data
+  ocs-fake-data1:
+    image: simonsobs/ocs:latest
+    hostname: alphadm-docker
+    environment:
+      - INSTANCE_ID=fake-data1
+      - LOGLEVEL=info
+    volumes:
+      - ./ocs-site-configs:/config:ro
+
+  # InfluxDB Publisher
+  ocs-influx-publisher:
+    image: simonsobs/ocs:latest
+    hostname: alphadm-docker
+    environment:
+      - INSTANCE_ID=influxagent
+    volumes:
+      - ./ocs-site-configs:/config:ro  

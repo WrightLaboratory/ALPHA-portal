@@ -1,0 +1,41 @@
+# Site configuration for a fake observatory.
+hub:
+
+  wamp_server: ws://localhost:8002/ws
+  wamp_http: http://localhost:8002/call
+  wamp_realm: test_realm
+  address_root: observatory
+
+hosts:
+
+  alphadm: {
+    # Directory for logs.
+    'log-dir': '/home/<user>/log/ocs/',
+
+    # Agents running directly on the host machine
+    # Note: We aren't going to run this Agent in the quickstart example,
+    #       but this gives a good example of configuring an agent directly
+    #       on the host
+    'agent-instances': [
+      {'agent-class': 'HostManager',
+       'instance-id': 'hm-1'},
+    ]
+  }
+
+  alphadm-docker: {
+    # Address of crossbar within Docker (based on service name)
+    'wamp_server': 'ws://crossbar:8002/ws',
+    'wamp_http': 'http://crossbar:8002/call',
+
+    # Agents running within Docker containers
+    'agent-instances': [
+      {'agent-class': 'InfluxDBAgent',
+       'instance-id': 'influxagent',
+       'arguments': ['--initial-state', 'record']},
+      {'agent-class': 'FakeDataAgent',
+       'instance-id': 'fake-data1',
+       'arguments': ['--mode', 'acq',
+                     '--num-channels', '16',
+                     '--sample-rate', '4']},
+    ]
+  }

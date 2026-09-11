@@ -8,9 +8,10 @@ theme: dark
 default_2fa_method: #totp
 
 server:
+  #address: "tcp://:9091/authelia"
   host: 0.0.0.0
   port: 9091
-  path: ""
+  path: "/authelia"
   read_buffer_size: 4096
   write_buffer_size: 4096
   enable_pprof: false
@@ -77,6 +78,11 @@ access_control:
         - ['group:lldap_admin']
         - ['group:abc']
       policy: two_factor
+    - domain: 'alphadm.wlab.yale.edu'
+      subject: 
+        - ['group:lldap_admin']
+        - ['group:abc']
+      policy: two_factor
 
 session:
   name: authelia_session
@@ -86,8 +92,8 @@ session:
   remember_me_duration: 1M
   cookies:
     - domain: 'alphadm.wlab.yale.edu'
-      authelia_url: 'https://auth.alphadm.wlab.yale.edu'
-      #authelia_url: 'https://alphadm.wlab.yale.edu/authtest'
+      #authelia_url: 'https://auth.alphadm.wlab.yale.edu'
+      authelia_url: 'https://alphadm.wlab.yale.edu/authelia'
       default_redirection_url: 'https://alphadm.wlab.yale.edu'
       
 regulation:
