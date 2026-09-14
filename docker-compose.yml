@@ -88,3 +88,6 @@ services:
       - 8082:80
     volumes:
       - ./ocs-web/config.json:/app/dist/config.json:ro
+    networks:
+      - default
+      - ocs-network

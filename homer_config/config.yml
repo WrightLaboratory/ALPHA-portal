@@ -96,7 +96,7 @@ message:
   title: "Optional message!"
   icon: "fa fa-exclamation-triangle"
   # The content also accepts HTML content, so you can add divs, images or whatever you want to make match your needs.
-  content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+  content: "ALPHA portal"
 
 # Optional navbar
 # links: [] # Allows for navbar (dark mode, layout, and search) without any links
@@ -143,6 +143,27 @@ services:
         # Optional tagstyle
         tagstyle: "is-success"
         url: "https://grafana.alphadm.wlab.yale.edu"
+      - name: "Whoami"
+        logo: "assets/tools/sample2.png"
+        subtitle: "Another application"
+        tag: "app"
+        # Optional tagstyle
+        tagstyle: "is-success"
+        url: "https://whoami.alphadm.wlab.yale.edu"
+      - name: "OCS"
+        logo: "assets/tools/sample2.png"
+        subtitle: "Another application"
+        tag: "app"
+        # Optional tagstyle
+        tagstyle: "is-success"
+        url: "https://ocs-web.alphadm.wlab.yale.edu/monitor.html"
+      - name: "Auth"
+        logo: "assets/tools/sample2.png"
+        subtitle: "Another application"
+        tag: "app"
+        # Optional tagstyle
+        tagstyle: "is-success"
+        url: "https://auth.alphadm.wlab.yale.edu"
   - name: "Other group"
     icon: "fas fa-heartbeat"
     items:

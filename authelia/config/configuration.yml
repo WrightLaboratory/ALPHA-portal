@@ -77,6 +77,11 @@ access_control:
         - ['group:lldap_admin']
         - ['group:abc']
       policy: two_factor
+    - domain: 'alphadm.wlab.yale.edu'
+      subject: 
+        - ['group:lldap_admin']
+        - ['group:abc']
+      policy: two_factor
 
 session:
   name: authelia_session
