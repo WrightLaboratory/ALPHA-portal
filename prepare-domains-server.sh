@@ -1,7 +1,7 @@
 #!/bin/bash
 cat >> /etc/hosts <<EOF
 
-#ALPHA portal dev - remote
+#ALPHA portal dev - client
 
 10.66.253.201   alphadm.wlab.yale.edu
 10.66.253.201   whoami.alphadm.wlab.yale.edu
