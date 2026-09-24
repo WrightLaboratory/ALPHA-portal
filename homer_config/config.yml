@@ -161,7 +161,7 @@ services:
         tag: "testing"
         # Optional tagstyle
         tagstyle: "is-success"
-        url: "https://whoami.alphadm.wlab.yale.edu"
+        url: "https://alphadm.wlab.yale.edu/whoami"
       - name: "LLDAP"
         logo: "assets/tools/sample.png"
         # Alternatively a fa icon can be provided:
