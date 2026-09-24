@@ -5,7 +5,7 @@
 ###############################################################################
 
 theme: dark
-default_2fa_method: #totp
+default_2fa_method: totp
 
 server:
   host: 0.0.0.0
